@@ -59,3 +59,8 @@ app.post("/", (req, res) => {
 app.listen(port, () => {
     console.log(`Listening at port ${port}`);
 });
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+    res.status(200).send("API is running!");
+});

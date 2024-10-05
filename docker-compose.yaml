@@ -1,28 +1,29 @@
 version: "3.8"
 services:
-  mongodb:
-    container_name: mongo
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+    mongodb:
+      container_name: mongo
+      image: mongo:latest
+      ports:
+        - "27017:27017"
 
-  backend:
-    container_name: backend
-    image: backend:v1
-    build: ./techdome-backend
-    environment:
-        - DB=mongodb+srv://rohit-admin:admin@123@rohit.cskvl.mongodb.net
-        - JWT_SECRET=saptsagare2020
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongodb      
+    backend:
+      container_name: backend
+      image: backend:v1
+      build: ./techdome-backend
+      environment:
+          - DB=mongodb+srv://rohit:rohit123@rohit.cskvl.mongodb.net/findjob_DB
+          - JWT_SECRET=saptsagare2020
+          - PORT=5000
+      ports:
+        - "5000:5000"
+      depends_on:
+        - mongodb      
 
-  frontend:
-    container_name: frontend
-    image: frontend:v1
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend      
+    frontend:
+      container_name: frontend
+      image: frontend:v1
+      build: ./frontend
+      ports:
+        - "3000:3000"
+      depends_on:
+        - backend      
