@@ -15,7 +15,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DB=mongodb+srv://saptsagare2020:Shubham2579@cluster0.vaitvxh.mongodb.net/jobfinde_DB
+      - DB=mongodb+srv://rohit-admin:<db_password>@rohit.cskvl.mongodb.net
       
       - JWT_SECRET=saptsagare2020
  
