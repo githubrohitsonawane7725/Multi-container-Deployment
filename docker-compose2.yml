@@ -15,7 +15,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DB=mongodb+srv://rohit-admin:<db_password>@rohit.cskvl.mongodb.net
+      - DB=mongodb+srv://rohit-admin:admin@123@rohit.cskvl.mongodb.net
       
       - JWT_SECRET=saptsagare2020
  
@@ -27,9 +27,9 @@ services:
   db:
     image: mongo:6.0.17
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: mydatabase
+      MONGO_INITDB_ROOT_USERNAME: rohit-admin
+      MONGO_INITDB_ROOT_PASSWORD: admin@123
+      MONGO_INITDB_DATABASE: jobfind_DB
     ports:
       - "27017:27017"
     networks:
