@@ -22,6 +22,7 @@ app.use(cors({
     origin: 'http://localhost:3000', // Update this for production if needed
     credentials: true // Optional, if you need to send cookies or authentication headers
 }));
+//To open for internet public change the localhost to 0.0.0.0 above
 
 
 // Middleware setup
@@ -32,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({
     origin: 'http://localhost:3000' // Specify your frontend URL here
 }));
+//To open for internet public change the localhost to 0.0.0.0 above
 
 // Connect to database
 require("./database/conn");
