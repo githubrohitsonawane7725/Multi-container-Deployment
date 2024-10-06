@@ -334,6 +334,40 @@ kubectl expose deployment backend --type=NodePort --port=5000
 kubectl expose deployment mongo --type=NodePort --port=27071
 ```
 
+### Verify the Deployments and Services
+ Check  the pods are up and running:
+```
+ kubectl get pods
+```
+### Verify the services:
+```
+kubectl get svc
+
+```
+
+### Expose Frontend via NodePort or LoadBalancer (if needed):
+For NodePort
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  type: NodePort
+  ports:
+    - port: 80              # The port exposed to external users
+      targetPort: 3000       # The port your frontend container listens on
+      nodePort: 30001        # NodePort (between 30000-32767)
+```
+Apply the service using
+
+kubectl apply -f frontend-service.yml
+Access the frontend
+minikube service frontend-service
+
+
 
 ## 7. Screenshots:
 
