@@ -373,7 +373,7 @@ minikube service frontend-service
 
 ### 1. Frontend running in the browser (http://localhost:3000):
 
-![image](https://github.com/user-attachments/assets/4f020633-fa1b-49eb-8cef-c4465b04b891)
+![image](https://github.com/user-attachments/assets/9a598f0d-feaf-4b75-bbdd-7a605784c517)
 
 
 ### 2. Database connection with health checkup:
