@@ -64,52 +64,35 @@ multi-container-app/
 docker-compose.yml file
 
 ```
-version: '3'
-
+version: "3.8"
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    networks:
-      - app-network
-  
-  backend:
-    build: ./backend
-    ports:
-      - "5000:5000"
-    environment:
-      - DB=mongodb+srv://saptsagare2020:Shubham2579@cluster0.vaitvxh.mongodb.net/jobfinde_DB
-      - JWT_SECRET=saptsagare2020
-    depends_on:
-      - db
-    networks:
-      - app-network
-  
-  db:
-    image: mongo:6
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: mydatabase
-    ports:
-      - "27017:27017"
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    mongodb:
+      container_name: mongo
+      image: mongo:latest
+      ports:
+        - "27017:27017"
 
-networks:
-  app-network:
-    driver: bridge
+    backend:
+      container_name: backend
+      image: backend:v1
+      build: ./techdome-backend
+      environment:
+          - DB=mongodb+srv://rohit:rohit123@rohit.cskvl.mongodb.net/findjob_DB
+          - JWT_SECRET=saptsagare2020
+          - PORT=5000
+      ports:
+        - "5000:5000"
+      depends_on:
+        - mongodb      
 
-volumes:
-  mongo-data:
+    frontend:
+      container_name: frontend
+      image: frontend:v1
+      build: ./frontend
+      ports:
+        - "3000:3000"
+      depends_on:
+        - backend      
 
 
 ```
@@ -216,12 +199,49 @@ To deploy the application to a local Kubernetes cluster using Minikube, follow t
 
 ### 2. Apply Kubernetes Manifests:
 
-backend-deployment.yml:
+frontend-deployment.yml:
 ```
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: multi-container-app-deploymeny-frontend
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      nodePort: 30001
+  selector:
+    app: frontend
+```
+
+Backend-deployment.yml:
+```
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
 spec:
   replicas: 1
   selector:
@@ -233,20 +253,76 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend
-        image: backend-image
-        ports:
-        - containerPort: 5000
-```
+        - name: backend
+          image: multi-container-app-deploymeny-backend
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB
+              value: "mongodb+srv://saptsagare2020:Shubham2579@cluster0.vaitvxh.mongodb.net/jobfinde_DB"
+            - name: JWT_SECRET
+              value: "saptsagare2020"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  ports:
+    - port: 5000
+  selector:
+    app: backend
+  type: ClusterIP
 
+```
+Backend-deployment.yml:
+```
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6.0.17
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "root"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  ports:
+    - port: 27017
+  selector:
+    app: mongo
+  type: ClusterIP
+
+```
 ### Apply the manifests using kubectl:
 
 ```
-kubectl apply -f backend-deployment.yml
-
 kubectl apply -f frontend-deployment.yml
 
-kubectl apply -f db-deployment.yml
+kubectl apply -f backend-deployment.yml
+
+kubectl apply -f mongo-deployment.yml
 ```
 
 ### Expose the services:
@@ -254,6 +330,8 @@ kubectl apply -f db-deployment.yml
 kubectl expose deployment frontend --type=NodePort --port=3000
 
 kubectl expose deployment backend --type=NodePort --port=5000
+
+kubectl expose deployment mongo --type=NodePort --port=27071
 ```
 
 
