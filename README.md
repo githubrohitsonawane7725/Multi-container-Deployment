@@ -376,15 +376,15 @@ minikube service frontend-service
 ![image](https://github.com/user-attachments/assets/9a598f0d-feaf-4b75-bbdd-7a605784c517)
 
 
-### 2. Database connection with health checkup:
+### 2. Dockercompose output running :
 
-![image](https://github.com/user-attachments/assets/e702dc57-cc25-43ac-9667-daf008554fb9)
+![image](https://github.com/user-attachments/assets/56dcfee0-9acd-4ccb-a29a-3bab796bdca9))
 
-### 3. Docker Compose Output:
-![image](https://github.com/user-attachments/assets/1e054408-3a69-4a72-8f16-feb396c305e1)
+### 3. Docker Compose Successfully build the Docker images and container:
+![image](https://github.com/user-attachments/assets/ee9aee30-0357-4aa1-a381-f0a15fa2d6e2)
 
+### 3. Successfully created Kubernetes:
 
-
-
+![image](https://github.com/user-attachments/assets/08d8628a-0c0a-463c-9fc5-b4b1f7e48bb2)
 
 
